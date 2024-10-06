@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String?
+  password     String?
+  provider     Provider
+  streams      Stream[] @relation("user") // Songs added by the user to the room
+  upvotes      Upvote[]
+  addedStreams Stream[] @relation("addedBy") // Streams added by this user
+  hostedSpaces Space[]  @relation("hostedBy") // Spaces (rooms) hosted by the user (admin)
+  spacesJoined Space[]  @relation("spaceMembers") // Spaces (rooms) joined by the user as a member
+
+  Subscriptions Subscription[]
+}
+
+model Stream {
+  // Represents a song in the room
+  id            String         @id @default(uuid())
+  type          StreamType
+  url           String
+  extractedId   String
+  title         String         @default("") // Song title
+  smallImg      String         @default("") // Small image of the song (album cover)
+  bigImg        String         @default("") // Large image of the song
+  active        Boolean        @default(true) // Indicates whether the stream is active
+  played        Boolean        @default(false) // Stops voting once the song starts playing
+  playedTs      DateTime? // Timestamp when the song starts playing
+  createAt      DateTime       @default(now()) // Creation timestamp
+  upvotes       Upvote[] // Tracks the upvotes for the song
+  userId        String // Foreign key to the user who added the song
+  user          User           @relation(fields: [userId], references: [id], name: "user") // Relationship to user who added the song
+  currentStream CurrentStream? // Relationship to the current playing song
+  addedBy       String // Foreign key to the user who added the song to the room
+  addedByUser   User           @relation("addedBy", fields: [addedBy], references: [id]) // Relationship to user who added
+  spaceId       String? // Foreign key to the room
+  space         Space?         @relation("spaceStreams", fields: [spaceId], references: [id], onDelete: Cascade) // Room relation
+}
+
+model CurrentStream {
+  // Tracks the currently playing song in a room
+  id       String  @id @default(uuid())
+  userId   String // Foreign key to the user who is playing the stream
+  streamId String? @unique // Foreign key to the current stream (song) in the room
+  stream   Stream? @relation(fields: [streamId], references: [id])
+  spaceId  String? @unique // Foreign key to the room where the current stream is playing
+  space    Space?  @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model Upvote {
+  // Tracks upvotes for each song by users
+  id       String @id @default(uuid())
+  userId   String // Foreign key to the user who voted
+  streamId String // Foreign key to the stream (song) being voted on
+  user     User   @relation(fields: [userId], references: [id]) // Relationship to user
+  stream   Stream @relation(fields: [streamId], references: [id], onDelete: Cascade) // Relationship to stream (song)
+
+  @@unique([userId, streamId]) // Ensures a user can vote for a song only once
+}
+
+model Space {
+  // Represents a room in the application
+  id            String         @id @default(uuid())
+  name          String // Room name
+  streams       Stream[]       @relation("spaceStreams") // Songs added to the room (queue)
+  hostId        String // Foreign key to the user who hosts the room (admin)
+  host          User           @relation("hostedBy", fields: [hostId], references: [id]) // Relationship to admin
+  isActive      Boolean        @default(true) // Indicates if the room is active
+  isPublic      Boolean        @default(true) // Public/private room flag
+  password      String? // Password for private rooms
+  currentStream CurrentStream? // Tracks the currently playing song in the room
+  members       User[]         @relation("spaceMembers") // Users who joined the room
+
+  Subscribers Subscription[]
+}
+
+model Subscription {
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  space       Space @relation(fields: [spaceId], references: [id])
+  spaceId     String
+
+  @@id([userId, spaceId])
+}
+
+enum StreamType {
+  Spotify
+  Youtube
+}
+
+enum Provider {
+  // Enum for user authentication providers
+  Google
+  Credentials
+}
