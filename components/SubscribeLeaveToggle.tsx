@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
 
@@ -16,8 +16,6 @@ const SubscribeLeaveToggle = ({
     isSubscribed,
     spaceId,
     spaceName,
-    isPublic,
-    password
 }: SubscribeLeaveToggleProps) => {
 
     const subscribe = async () => {
