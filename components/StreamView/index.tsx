@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import NowPlaying from './NowPlaying';
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
-const index = ({
+const Index = ({
     creatorId,
     playVideo,
     spaceId,
@@ -35,8 +35,12 @@ const index = ({
             }
     
             setQueue(data); 
-          } catch (error: any) {
-            toast.error(error.message || 'Error fetching streams');
+          } catch (error: unknown) {
+            if (error instanceof Error) {
+              toast.error(error.message || 'Error fetching streams');
+            } else {
+              toast.error('Error fetching streams');
+            }
           } finally {
             setLoading(false);
           }
@@ -85,4 +89,4 @@ const index = ({
   )
 }
 
-export default index; 
+export default Index; 

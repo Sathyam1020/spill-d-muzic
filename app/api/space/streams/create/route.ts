@@ -1,13 +1,12 @@
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import db from "@/lib/db";
-//@ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-expect-error
 import youtubesearchapi from "youtube-search-api";
 import { YT_REGEX } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/db";
-
 
 const CreateStreamSchema = z.object({
   creatorId: z.string(),
@@ -175,6 +174,7 @@ export async function POST(req: NextRequest) {
         spaceId:data.spaceId
       },
     });
+    console.log(stream); 
 
     return NextResponse.json({
       ...stream,

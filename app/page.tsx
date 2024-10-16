@@ -8,7 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 
 export default async function LandingPage() {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
 
   return (
     <div className="flex min-h-screen items-center flex-col bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">

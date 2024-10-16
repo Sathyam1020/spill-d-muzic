@@ -1,6 +1,6 @@
 import { authOptions } from "@/lib/auth-options";
 import prisma from "@/lib/db";
-import { NextApiRequest } from "next";
+// import { NextApiRequest } from "next";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
