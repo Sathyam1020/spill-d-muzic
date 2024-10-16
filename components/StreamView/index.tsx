@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import NowPlaying from './NowPlaying';
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
-const Index = ({
+const StreamView = ({
     creatorId,
     playVideo,
     spaceId,
@@ -89,4 +89,4 @@ const Index = ({
   )
 }
 
-export default Index; 
+export default StreamView; 
