@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
     }
 
     const res = await youtubesearchapi.GetVideoDetails(videoId);
+    // console.log("Youtube response api",res); 
 
     // Check if the user is not the creator
     if (user.id !== data.creatorId) {
@@ -132,7 +133,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const thumbnails = res.thumbnail.thumbnails;
+    const thumbnails = res.thumbnail?.thumbnails;
     thumbnails.sort((a: { width: number }, b: { width: number }) =>
       a.width < b.width ? -1 : 1,
     );
@@ -174,7 +175,7 @@ export async function POST(req: NextRequest) {
         spaceId:data.spaceId
       },
     });
-    console.log(stream); 
+    // console.log(stream); 
 
     return NextResponse.json({
       ...stream,

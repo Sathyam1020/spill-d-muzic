@@ -41,7 +41,9 @@ const AddSongButton = ({
     const [inputLink, setInputLink] = useState("");
     const [loading, setLoading] = useState(false); 
     const [queue, setQueue] = useState<Video[]>([]);
-    console.log(inputLink); 
+    // console.log("CreatorID: ", creatorId); 
+    // console.log("SpaceID: ", spaceId);
+    // console.log("InputLink:", inputLink); 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

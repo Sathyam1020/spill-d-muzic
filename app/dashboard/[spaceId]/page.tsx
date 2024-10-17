@@ -1,8 +1,8 @@
 
-import SongList from '@/components/SongList';
-import { authOptions } from '@/lib/auth-options';
+// import SongList from '@/components/SongList';
+// import { authOptions } from '@/lib/auth-options';
 import prisma from '@/lib/db';
-import { getServerSession } from 'next-auth';
+// import { getServerSession } from 'next-auth';
 import StreamView from "@/components/StreamView";
 const page = async({
     params:{spaceId}
