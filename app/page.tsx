@@ -5,10 +5,10 @@ import { Users, Radio, Headphones } from "lucide-react";
 import Appbar from "@/components/Appbar"; 
 import { getServerSession } from "next-auth";
 // import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth-options";
+ import { authOptions } from "@/lib/auth-options";
 
 export default async function LandingPage() {
-  // const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="flex min-h-screen items-center flex-col bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
@@ -25,17 +25,29 @@ export default async function LandingPage() {
                 fans like never before.
               </p>
             </div>
-            <div className="space-x-4">
-              <Button className="bg-purple-600 text-white hover:bg-purple-700">
-                <Link
-                  href={{
-                    pathname: "/auth",
-                    query: { authType: "signUp" },
-                  }}
-                >
-                  Get Started
-                </Link>
-              </Button>
+            <div className="space-x-4 flex ">
+              {
+                session?.user.id ? <div>
+                <Button className="bg-purple-600 text-white hover:bg-purple-700">
+                  <Link
+                    href='/home'
+                  >
+                    Get Started
+                  </Link>
+                </Button>
+                </div> : <div>
+                  <Button className="bg-purple-600 text-white hover:bg-purple-700">
+                  <Link
+                    href={{
+                      pathname: "/auth",
+                      query: { authType: "signUp" },
+                    }}
+                  >
+                    Get Started
+                  </Link>
+                </Button>
+                </div>
+              }
               <Button className="bg-white text-purple-400 hover:bg-white/90">
                 Learn More
               </Button>
